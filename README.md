@@ -31,7 +31,8 @@ D-
   -- Method ValueOfCards (Value: Compute how many points the card is worth): Ace=11, 2=2, 3=3, 4=4, 5=5, 6=6, 7=7, 8=8, 9=9, 10=10, Jack=10, Queen=10, King=10
 - Class of Player/Dealer List, Called Hand? (Stores the individuals hand properties)
   -- Method: ShowPlayersHand Console.WriteLine()
-- Method for Hit: Hit
+- Method for HIT: Hit
+- Method for BUST: Bust
 
 A-
 
@@ -58,8 +59,8 @@ A-
 - Method for "BUST" (Console.WriteLine())
 
 - If the dealer goes over 21, they “BUST” and the dealer loses.
-- App should display the winner (Console.WriteLine(), (Calculation of adding the cards in each hand, whichever is bigger "BUST" the winner is whoever is closer to BlackJack (21) without going over.
+- App should display the winner (Console.WriteLine()), (Calculation of adding the cards in each hand, whichever is bigger. Calculation for comparing the players hands.) the winner is whoever is closer to BlackJack (21) without going over.
 - If the value of each players hand is tied, the dealer WINS. (playerHand.value == dealerHand.value) (Console.WriteLine(The Dealer WINS!))
-- Option to restart the game
+- Option to restart the game (while loop)
   -- Remake and Reshuffle Deck
   -- Neither player has cards in their hand (Clear the Player/Deck Class)
