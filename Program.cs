@@ -13,10 +13,16 @@ namespace BlackJackCS
 
     class Player
     {
-        public List<Card> Hand { get; set; }
+        public string Name { get; set; }
+        public List<Card> Hand = new List<Card>();
         public int HandValue()
         {
-            return 0;
+            var total = 0;
+            foreach (var c in Hand)
+            {
+                total = total + c.Value;
+            }
+            return total;
         }
     }
 
@@ -107,34 +113,75 @@ namespace BlackJackCS
     {
         static void Main(string[] args)
         {
-            var shoe = new Deck();
-            var card = shoe.Draw();
+            Console.Write("Hello, What is your name? ");
+            var playerName = Console.ReadLine();
 
-            Console.WriteLine($"{card.Face} of {card.Suit}");
+            var firstPlayer = new Player();
+            firstPlayer.Name = playerName;
+
+            Console.WriteLine($"Hello, {firstPlayer.Name}. ");
+
+            var shoe = new Deck();
+            shoe.Shuffle();
+
+            var dealerPlayer = new Player();
+
+            var cardOne = shoe.Draw();
+            dealerPlayer.Hand.Add(cardOne);
+            var cardTwo = shoe.Draw();
+            dealerPlayer.Hand.Add(cardTwo);
+            var cardThree = shoe.Draw();
+            firstPlayer.Hand.Add(cardThree);
+            var cardFour = shoe.Draw();
+            firstPlayer.Hand.Add(cardFour);
+
+
+            var initialTotal = firstPlayer.HandValue();
+            Console.WriteLine($"{firstPlayer.Name} got a {cardOne.Face} of {cardOne.Suit} and a {cardTwo.Face} of {cardTwo.Suit}");
+            Console.WriteLine($"Which has a total of {initialTotal}");
+
+            if (initialTotal == 21)
+            {
+                Console.WriteLine("Congrats on getting BlackJack");
+                return;
+            }
+            else if (initialTotal > 21)
+            {
+                Console.WriteLine("Sorry, the Dealer Wins");
+            }
+
+            Console.Write("Would you like to Hit (type h) or Stand (type s)? ");
+            var userInput = Console.ReadLine();
+            if (userInput.ToLower() == "h")
+            {
+                var hitCard = shoe.Draw();
+                firstPlayer.Hand.Add(hitCard);
+                Console.WriteLine($"{firstPlayer.Name} Hit");
+                Console.WriteLine($"{firstPlayer.Name} got a {hitCard.Face} of {hitCard.Suit}");
+            }
+            else if (userInput.ToLower() == "s")
+            {
+                Console.WriteLine($"{firstPlayer.Name} Stands");
+            }
+
+            Console.WriteLine($"{firstPlayer.Name} got a {firstPlayer.HandValue()}");
+
+            var dealerInitialTotal = dealerPlayer.HandValue();
+            if (dealerInitialTotal > 21)
+            {
+                Console.WriteLine("The Dealer has Busted, the Player Wins!");
+            }
+            else if (dealerInitialTotal < 17)
+            {
+                var drawCard = shoe.Draw();
+                dealerPlayer.Hand.Add(drawCard);
+                Console.WriteLine($"The Dealer's Hand Value is {dealerPlayer.HandValue()}");
+            }
+
+
+
         }
 
-
-        //Create a player hand
-        //Create a dealer hand
-        //Ask the deck for a card (remove index [0]) and place it in the player hand
-        //Ask the deck for a card (remove index [0]) and place it in the player hand
-        //Ask the deck for a card (remove index [0]) and place it in the dealer hand
-        //Ask the deck for a card (remove index [0]) and place it in the dealer hand
-        //Show the player the cards in their hand and the TotalValue of their hand
-        //If they have BUSTED, then go to step 15
-        //Ask the player if they want to HIT or STAND
-        //If HIT---Ask the deck for a card (remove index [0]) and place it in the player hand, repeat step 10 
-        //If STAND continue on
-        //If the dealer has BUSTED, then go to step 17
-        //If the dealer has has than 17---Add a card (remove index[0]) and place it in the dealers hand and go back to step 14
-        // Show the dealers hand TotalValue
-        //If the player BUSTED show Console.WriteLine("The Dealer Wins")
-        //If the dealer BUSTED show Console.WriteLine("The Player Wins") 
-        //If the dealerHandValue is more than the playerHandValue then show "The Dealer Wins", else show "The Player Wins"
-        //dealerHandValue > playerHandValue Console.WriteLine("The Dealer Wins")
-        //playerHandValue > dealerHandValue Console.WriteLine("The Player Wins")
-        //If the value of the hands are even, show "The Dealer Wins"
-        //dealerHandValue == playerHandValue Console.WriteLine("The Dealer Wins")
     }
 }
 
