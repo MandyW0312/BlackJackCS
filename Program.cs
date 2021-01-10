@@ -95,22 +95,58 @@ namespace BlackJackCS
             return drawnCard;
         }
     }
-
-    class Game
-    {
-        public Deck Deck { get; set; }
-        public Player Dealer { get; set; }
-        public Player Human { get; set; }
-
-        public void PlayGame()
-        {
-            Deck.Shuffle();
-            Dealer.Hand = new List<Card>();
-            Human.Hand = new List<Card>();
-        }
-    }
     class Program
     {
+
+        static bool Play(Player player, Deck shoe)
+        {
+            while (true)
+            {
+                Console.Write("Would you like to Hit (type h) or Stand (type s)? ");
+                var userInput = Console.ReadLine();
+                if (userInput.ToLower() == "h")
+                {
+                    var hitCard = shoe.Draw();
+                    player.Hand.Add(hitCard);
+                    Console.WriteLine($"{player.Name} Hit");
+                    Console.WriteLine($"{player.Name} got a {hitCard.Face} of {hitCard.Suit} and their total is now {player.HandValue()}");
+                    if (player.HandValue() > 21)
+                    {
+                        Console.WriteLine($"{player.Name} BUSTED!");
+                        return true;
+                    }
+                }
+                else if (userInput.ToLower() == "s")
+                {
+                    Console.WriteLine($"{player.Name} Stands");
+                    return false;
+                }
+            }
+        }
+
+        static bool DealerPlays(Player dealer, Deck shoe)
+        {
+            while (true)
+            {
+                if (dealer.HandValue() < 17)
+                {
+                    var hitCard = shoe.Draw();
+                    dealer.Hand.Add(hitCard);
+                    Console.WriteLine($"{dealer.Name} Hit");
+                    Console.WriteLine($"{dealer.Name} got a {hitCard.Face} of {hitCard.Suit} and the total is now {dealer.HandValue()}");
+                    if (dealer.HandValue() > 21)
+                    {
+                        Console.WriteLine($" {dealer.Name} Busted!");
+                        return true;
+                    }
+                }
+                else if (dealer.HandValue() >= 17)
+                {
+                    Console.WriteLine($"{dealer.Name} Stands");
+                    return false;
+                }
+            }
+        }
         static void Main(string[] args)
         {
             Console.Write("Hello, What is your name? ");
@@ -121,101 +157,86 @@ namespace BlackJackCS
 
             Console.WriteLine($"Hello, {firstPlayer.Name}. ");
 
-            var shoe = new Deck();
-            shoe.Shuffle();
-
-            var dealerPlayer = new Player();
-
-            var cardOne = shoe.Draw();
-            dealerPlayer.Hand.Add(cardOne);
-            var cardTwo = shoe.Draw();
-            dealerPlayer.Hand.Add(cardTwo);
-            var cardThree = shoe.Draw();
-            firstPlayer.Hand.Add(cardThree);
-            var cardFour = shoe.Draw();
-            firstPlayer.Hand.Add(cardFour);
-
-
-            var initialTotal = firstPlayer.HandValue();
-            Console.WriteLine($"{firstPlayer.Name} got a {cardThree.Face} of {cardThree.Suit} and a {cardFour.Face} of {cardFour.Suit}");
-            Console.WriteLine($"Which has a total of {initialTotal}");
-
-            if (initialTotal == 21)
+            while (true)
             {
-                Console.WriteLine("Congrats on getting BlackJack");
-                return;
-            }
-            else if (initialTotal > 21)
-            {
-                Console.WriteLine("Sorry, the Dealer Wins");
-            }
-
-            Console.Write("Would you like to Hit (type h) or Stand (type s)? ");
-            var userInput = Console.ReadLine();
-            if (userInput.ToLower() == "h")
-            {
-                var hitCard = shoe.Draw();
-                firstPlayer.Hand.Add(hitCard);
-                Console.WriteLine($"{firstPlayer.Name} Hit");
-                Console.WriteLine($"{firstPlayer.Name} got a {hitCard.Face} of {hitCard.Suit}");
-            }
-            else if (userInput.ToLower() == "s")
-            {
-                Console.WriteLine($"{firstPlayer.Name} Stands");
-            }
 
 
-            Console.WriteLine($"{firstPlayer.Name}'s Hand Value is {firstPlayer.HandValue()}");
+                var shoe = new Deck();
+                shoe.Shuffle();
 
-            var dealerInitialTotal = dealerPlayer.HandValue();
-            Console.WriteLine($"The Dealer has received a {cardOne.Face} of {cardOne.Suit} and a {cardTwo.Face} of {cardTwo.Suit}");
-            if (dealerInitialTotal > 21)
-            {
-                Console.WriteLine("The Dealer has Busted, the Player Wins!");
-            }
-            else if (dealerInitialTotal < 17)
-            {
-                var drawCard = shoe.Draw();
-                dealerPlayer.Hand.Add(drawCard);
-                Console.WriteLine($"The Dealer has received a {drawCard.Face} of {drawCard.Suit}");
-                Console.WriteLine($"The Dealer's Hand Value is {dealerPlayer.HandValue()}");
-            }
+                var dealerPlayer = new Player();
+                dealerPlayer.Name = "Dealer";
 
-            if (firstPlayer.HandValue() > 21)
-            {
-                Console.WriteLine("Bust, The Dealer Wins");
-            }
-            else if (dealerPlayer.HandValue() > 21)
-            {
-                Console.WriteLine("Bust, The Player Wins");
-            }
-            else if (dealerPlayer.HandValue() > firstPlayer.HandValue())
-            {
-                Console.WriteLine("The Dealer Wins");
-            }
-            else if (dealerPlayer.HandValue() < firstPlayer.HandValue())
-            {
-                Console.WriteLine("The Player Wins");
-            }
-            else if (dealerPlayer.HandValue() == firstPlayer.HandValue())
-            {
-                Console.WriteLine("Sorry, The Dealer Wins");
-            }
 
-            // Console.Write("Would you like to play again? (y for yes and n for no) ");
-            // var answer = Console.ReadLine();
 
-            // if (answer.ToLower() == "y")
-            // {
-            //     Deck.Shuffle();
-            // }
-            // else if (answer.ToLower() == "n")
-            // {
-            //     Console.WriteLine("Thanks for Playing!");
-            // }
+                var cardOne = shoe.Draw();
+                dealerPlayer.Hand.Add(cardOne);
+                var cardTwo = shoe.Draw();
+                dealerPlayer.Hand.Add(cardTwo);
 
+                var cardThree = shoe.Draw();
+                firstPlayer.Hand.Add(cardThree);
+                var cardFour = shoe.Draw();
+                firstPlayer.Hand.Add(cardFour);
+
+
+                var initialTotal = firstPlayer.HandValue();
+                Console.WriteLine($"{firstPlayer.Name} got a {cardThree.Face} of {cardThree.Suit} and a {cardFour.Face} of {cardFour.Suit}");
+                Console.WriteLine($"Which has a total of {initialTotal}");
+
+                if (initialTotal == 21)
+                {
+                    Console.WriteLine("Congrats on getting BlackJack");
+                    return;
+                }
+                else if (initialTotal > 21)
+                {
+                    Console.WriteLine("Sorry, the Dealer Wins");
+                }
+
+                Play(firstPlayer, shoe);
+
+                Console.WriteLine($"{firstPlayer.Name}'s Hand Value is {firstPlayer.HandValue()}");
+
+                var dealerInitialTotal = dealerPlayer.HandValue();
+                Console.WriteLine($"The Dealer has received a {cardOne.Face} of {cardOne.Suit} and a {cardTwo.Face} of {cardTwo.Suit}");
+
+                DealerPlays(dealerPlayer, shoe);
+
+
+                if (firstPlayer.HandValue() > 21)
+                {
+                    Console.WriteLine("Bust, The Dealer Wins");
+                }
+                else if (dealerPlayer.HandValue() > 21)
+                {
+                    Console.WriteLine("Bust, The Player Wins");
+                }
+                else if (dealerPlayer.HandValue() > firstPlayer.HandValue())
+                {
+                    Console.WriteLine("The Dealer Wins");
+                }
+                else if (dealerPlayer.HandValue() < firstPlayer.HandValue())
+                {
+                    Console.WriteLine("The Player Wins");
+                }
+                else if (dealerPlayer.HandValue() == firstPlayer.HandValue())
+                {
+                    Console.WriteLine("Sorry, The Dealer Wins");
+                }
+                Console.Write("Would you like to play again? (y for yes and n for no) ");
+                var answer = Console.ReadLine();
+
+                if (answer.ToLower() == "n")
+                {
+                    return;
+                }
+
+                shoe.Shuffle();
+                firstPlayer.Hand.Clear();
+                dealerPlayer.Hand.Clear();
+            }
         }
-
     }
 }
 
