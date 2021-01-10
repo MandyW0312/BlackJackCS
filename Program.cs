@@ -137,7 +137,7 @@ namespace BlackJackCS
 
 
             var initialTotal = firstPlayer.HandValue();
-            Console.WriteLine($"{firstPlayer.Name} got a {cardOne.Face} of {cardOne.Suit} and a {cardTwo.Face} of {cardTwo.Suit}");
+            Console.WriteLine($"{firstPlayer.Name} got a {cardThree.Face} of {cardThree.Suit} and a {cardFour.Face} of {cardFour.Suit}");
             Console.WriteLine($"Which has a total of {initialTotal}");
 
             if (initialTotal == 21)
@@ -165,9 +165,10 @@ namespace BlackJackCS
             }
 
 
-            Console.WriteLine($"{firstPlayer.Name} got a {firstPlayer.HandValue()}");
+            Console.WriteLine($"{firstPlayer.Name}'s Hand Value is {firstPlayer.HandValue()}");
 
             var dealerInitialTotal = dealerPlayer.HandValue();
+            Console.WriteLine($"The Dealer has received a {cardOne.Face} of {cardOne.Suit} and a {cardTwo.Face} of {cardTwo.Suit}");
             if (dealerInitialTotal > 21)
             {
                 Console.WriteLine("The Dealer has Busted, the Player Wins!");
@@ -176,6 +177,7 @@ namespace BlackJackCS
             {
                 var drawCard = shoe.Draw();
                 dealerPlayer.Hand.Add(drawCard);
+                Console.WriteLine($"The Dealer has received a {drawCard.Face} of {drawCard.Suit}");
                 Console.WriteLine($"The Dealer's Hand Value is {dealerPlayer.HandValue()}");
             }
 
@@ -200,17 +202,17 @@ namespace BlackJackCS
                 Console.WriteLine("Sorry, The Dealer Wins");
             }
 
-            Console.Write("Would you like to play again? (y for yes and n for no) ");
-            var answer = Console.ReadLine();
+            // Console.Write("Would you like to play again? (y for yes and n for no) ");
+            // var answer = Console.ReadLine();
 
-            if (answer.ToLower() == "y")
-            {
-                Deck.Shuffle();
-            }
-            else if (answer.ToLower() == "n")
-            {
-                Console.WriteLine("Thanks for Playing!");
-            }
+            // if (answer.ToLower() == "y")
+            // {
+            //     Deck.Shuffle();
+            // }
+            // else if (answer.ToLower() == "n")
+            // {
+            //     Console.WriteLine("Thanks for Playing!");
+            // }
 
         }
 
