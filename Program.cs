@@ -34,19 +34,6 @@ namespace BlackJackCS
             ResetTheDeck();
             ShuffleTheDeck();
         }
-        public void ShuffleTheDeck()
-        {
-            var numberOfCards = cards.Count;
-            var randomNumberGenerator = new Random();
-            for (var rightIndex = cards.Count - 1; rightIndex >= 1; rightIndex--)
-            {
-                var leftIndex = randomNumberGenerator.Next(rightIndex);
-                var leftCard = cards[leftIndex];
-                var rightCard = cards[rightIndex];
-                cards[leftIndex] = rightCard;
-                cards[rightIndex] = leftCard;
-            }
-        }
 
         private void ResetTheDeck()
         {
@@ -82,6 +69,19 @@ namespace BlackJackCS
 
                     cards.Add(card);
                 }
+            }
+        }
+        public void ShuffleTheDeck()
+        {
+            var numberOfCards = cards.Count;
+            var randomNumberGenerator = new Random();
+            for (var rightIndex = cards.Count - 1; rightIndex >= 1; rightIndex--)
+            {
+                var leftIndex = randomNumberGenerator.Next(rightIndex);
+                var leftCard = cards[leftIndex];
+                var rightCard = cards[rightIndex];
+                cards[leftIndex] = rightCard;
+                cards[rightIndex] = leftCard;
             }
         }
         public Card Draw()
@@ -164,6 +164,7 @@ namespace BlackJackCS
                 Console.WriteLine($"{firstPlayer.Name} Stands");
             }
 
+
             Console.WriteLine($"{firstPlayer.Name} got a {firstPlayer.HandValue()}");
 
             var dealerInitialTotal = dealerPlayer.HandValue();
@@ -178,7 +179,38 @@ namespace BlackJackCS
                 Console.WriteLine($"The Dealer's Hand Value is {dealerPlayer.HandValue()}");
             }
 
+            if (firstPlayer.HandValue() > 21)
+            {
+                Console.WriteLine("Bust, The Dealer Wins");
+            }
+            else if (dealerPlayer.HandValue() > 21)
+            {
+                Console.WriteLine("Bust, The Player Wins");
+            }
+            else if (dealerPlayer.HandValue() > firstPlayer.HandValue())
+            {
+                Console.WriteLine("The Dealer Wins");
+            }
+            else if (dealerPlayer.HandValue() < firstPlayer.HandValue())
+            {
+                Console.WriteLine("The Player Wins");
+            }
+            else if (dealerPlayer.HandValue() == firstPlayer.HandValue())
+            {
+                Console.WriteLine("Sorry, The Dealer Wins");
+            }
 
+            Console.Write("Would you like to play again? (y for yes and n for no) ");
+            var answer = Console.ReadLine();
+
+            if (answer.ToLower() == "y")
+            {
+                Deck.Shuffle();
+            }
+            else if (answer.ToLower() == "n")
+            {
+                Console.WriteLine("Thanks for Playing!");
+            }
 
         }
 
